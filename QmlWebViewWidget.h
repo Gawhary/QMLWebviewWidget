@@ -55,6 +55,9 @@ signals:
     void urlChanged(QUrl arg);
     void attachedObjectChanged(QObject *arg);
     void attachedObjectNameChanged(QString arg);
+    void loadStarted();
+    void loadFinished(bool ok);
+    void loadProgress(int progress);
 
 private:
     void handleHoverMoveEvent(QHoverEvent *ev);

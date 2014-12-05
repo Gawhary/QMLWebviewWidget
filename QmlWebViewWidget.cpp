@@ -40,10 +40,14 @@ QmlWebViewWidget::QmlWebViewWidget(QQuickItem *parent) :
 
     m_widget = new QmlWebViewInternalWidget(this);
 
-    connect(m_widget, SIGNAL(urlChanged(QUrl)), this, SIGNAL(urlChanged(QUrl)) );
 
     m_attachedObject = NULL;
     m_attachedObjectName = "";
+
+    connect(m_widget, SIGNAL(urlChanged(QUrl)), this, SIGNAL(urlChanged(QUrl)) );
+    connect(m_widget, SIGNAL(loadStarted()), this, SIGNAL(loadStarted()));
+    connect(m_widget, SIGNAL(loadFinished(bool)), this, SIGNAL(loadFinished(bool)));
+    connect(m_widget, SIGNAL(loadProgress(int)), this, SIGNAL(loadProgress(int)));
 
     QObject::connect(this, &QQuickPaintedItem::widthChanged, this, [this]{
         QQuickWindow *w = this->window();
