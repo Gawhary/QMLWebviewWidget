@@ -30,8 +30,6 @@ class QmlWebViewWidget : public QQuickPaintedItem
     Q_OBJECT
     Q_PROPERTY(QObject* widget READ widget)
     Q_PROPERTY(QUrl url READ url WRITE setUrl NOTIFY urlChanged)
-    Q_PROPERTY(QObject *attachedObject READ attachedObject WRITE setAttachedObject NOTIFY attachedObjectChanged)
-    Q_PROPERTY(QString attachedObjectName READ attachedObjectName WRITE setAttachedObjectName NOTIFY attachedObjectNameChanged)
 
 
 public:
@@ -40,21 +38,13 @@ public:
     QObject *widget() const;
 
     QUrl url() const;
-    QObject *attachedObject();
-    QString attachedObjectName();
 
 public slots:
     void setUrl(QUrl arg);
     void setFocus(bool arg);
-    void setAttachedObject(QObject *attachedObject);
-    void setAttachedObjectName(QString attachedObjectName);
-    void attachObject();
-    QVariant evaluateJavaScript(QString scriptSource);
 
 signals:
     void urlChanged(QUrl arg);
-    void attachedObjectChanged(QObject *arg);
-    void attachedObjectNameChanged(QString arg);
     void loadStarted();
     void loadFinished(bool ok);
     void loadProgress(int progress);
@@ -63,8 +53,6 @@ private:
     void handleHoverMoveEvent(QHoverEvent *ev);
 
     QmlWebViewInternalWidget *m_widget;
-    QObject *m_attachedObject;
-    QString m_attachedObjectName;
 
 protected:
     virtual void geometryChanged(const QRectF & newGeometry,

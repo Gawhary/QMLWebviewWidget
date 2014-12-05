@@ -41,9 +41,6 @@ QmlWebViewWidget::QmlWebViewWidget(QQuickItem *parent) :
     m_widget = new QmlWebViewInternalWidget(this);
 
 
-    m_attachedObject = NULL;
-    m_attachedObjectName = "";
-
     connect(m_widget, SIGNAL(urlChanged(QUrl)), this, SIGNAL(urlChanged(QUrl)) );
     connect(m_widget, SIGNAL(loadStarted()), this, SIGNAL(loadStarted()));
     connect(m_widget, SIGNAL(loadFinished(bool)), this, SIGNAL(loadFinished(bool)));
@@ -76,16 +73,6 @@ QUrl QmlWebViewWidget::url() const
 }
 
 
-QObject *QmlWebViewWidget::attachedObject()
-{
-    return m_attachedObject;
-}
-
-QString QmlWebViewWidget::attachedObjectName()
-{
-    return m_attachedObjectName;
-}
-
 void QmlWebViewWidget::setUrl(QUrl arg)
 {
 
@@ -112,30 +99,7 @@ void QmlWebViewWidget::setFocus(bool arg)
     setActiveFocusOnTab(arg);
 }
 
-void QmlWebViewWidget::setAttachedObject(QObject *attachedObject)
-{
-    m_attachedObject = attachedObject;
-}
 
-void QmlWebViewWidget::setAttachedObjectName(QString attachedObjectName)
-{
-    m_attachedObjectName = attachedObjectName;
-}
-
-void QmlWebViewWidget::attachObject()
-{
-    qDebug() << "QmlWebViewWidget::attachObject() - Attaching an object to JS";
-    if(m_attachedObject != NULL)
-        m_widget->page()->mainFrame()->addToJavaScriptWindowObject(m_attachedObjectName, m_attachedObject);
-
-    qDebug() << "QmlWebViewWidget::attachObject() - Object name: " << m_widget->page()->mainFrame()->objectName();
-    qDebug() << "QmlWebViewWidget::attachObject() - Object attached";
-}
-
-QVariant QmlWebViewWidget::evaluateJavaScript(QString scriptSource)
-{
-    return m_widget->page()->mainFrame()->evaluateJavaScript(scriptSource);
-}
 
 void QmlWebViewWidget::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
