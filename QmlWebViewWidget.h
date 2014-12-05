@@ -15,11 +15,9 @@ private:
     explicit QmlWebViewInternalWidget(QQuickPaintedItem *parent);
 
 public slots:
-    void show(){}
 protected:
     QPaintEngine * paintEngine() const ;
     void paintEvent(QPaintEvent * event) ;
-    virtual bool event(QEvent * e);
 
 private:
     QQuickPaintedItem *m_qquickContainer;
@@ -34,7 +32,6 @@ class QmlWebViewWidget : public QQuickPaintedItem
     Q_PROPERTY(QUrl url READ url WRITE setUrl NOTIFY urlChanged)
     Q_PROPERTY(QObject *attachedObject READ attachedObject WRITE setAttachedObject NOTIFY attachedObjectChanged)
     Q_PROPERTY(QString attachedObjectName READ attachedObjectName WRITE setAttachedObjectName NOTIFY attachedObjectNameChanged)
-    Q_PROPERTY(bool focus READ focus WRITE setFocus NOTIFY focusChanged)
 
 
 public:
@@ -45,7 +42,6 @@ public:
     QUrl url() const;
     QObject *attachedObject();
     QString attachedObjectName();
-    bool focus() const;
 
 public slots:
     void setUrl(QUrl arg);
@@ -59,7 +55,6 @@ signals:
     void urlChanged(QUrl arg);
     void attachedObjectChanged(QObject *arg);
     void attachedObjectNameChanged(QString arg);
-    void focusChanged(bool arg);
 
 private:
     void handleHoverMoveEvent(QHoverEvent *ev);
@@ -67,8 +62,6 @@ private:
     QmlWebViewInternalWidget *m_widget;
     QObject *m_attachedObject;
     QString m_attachedObjectName;
-    bool m_focus;
-    QRectF m_geometry;
 
 protected:
     virtual void geometryChanged(const QRectF & newGeometry,

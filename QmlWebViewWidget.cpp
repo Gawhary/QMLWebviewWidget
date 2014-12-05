@@ -26,12 +26,6 @@ void QmlWebViewInternalWidget::paintEvent(QPaintEvent *event)
     m_qquickContainer->update(event->rect());
 }
 
-bool QmlWebViewInternalWidget::event(QEvent *e)
-{
-    if(e->type() == QEvent::Show)
-        return true;
-    return QWebView::event(e);
-}
 
 QmlWebViewWidget::QmlWebViewWidget(QQuickItem *parent) :
     QQuickPaintedItem(parent)
@@ -77,10 +71,6 @@ QUrl QmlWebViewWidget::url() const
     return m_widget->url();
 }
 
-bool QmlWebViewWidget::focus() const
-{
-    return m_focus;
-}
 
 QObject *QmlWebViewWidget::attachedObject()
 {
@@ -107,9 +97,7 @@ void QmlWebViewWidget::setUrl(QUrl arg)
 
 void QmlWebViewWidget::setFocus(bool arg)
 {
-    if (m_focus == arg)
-        return;
-    m_focus = arg;
+    QQuickPaintedItem::setFocus(arg);
     if(arg){
         m_widget->setFocus();
         forceActiveFocus();
@@ -117,9 +105,7 @@ void QmlWebViewWidget::setFocus(bool arg)
     else{
         m_widget->clearFocus();
     }
-    QQuickPaintedItem::setFocus(arg);
     setActiveFocusOnTab(arg);
-    emit focusChanged(arg);
 }
 
 void QmlWebViewWidget::setAttachedObject(QObject *attachedObject)
@@ -153,7 +139,6 @@ void QmlWebViewWidget::geometryChanged(const QRectF &newGeometry, const QRectF &
     if(newGeometry == oldGeometry)
         return;
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
-    m_geometry = newGeometry;
     updateGeometry();
 }
 
@@ -170,6 +155,10 @@ bool QmlWebViewWidget::event(QEvent *e)
         return true;
     }
 
+    if( e->type() == QEvent::MouseButtonPress ||
+        e->type() == QEvent::MouseButtonDblClick )
+        setFocus(true);
+
     if(m_widget->event(e))
         return true;
     return QQuickPaintedItem::event(e);
@@ -185,7 +174,7 @@ void QmlWebViewWidget::updateGeometry()
     newPos += this->window()->position();
     qDebug() << "QmlWebViewWidget::updateGeometry, top left mapped to screen: " << newPos;
     }
-    QRectF absRect(newPos, m_geometry.size());
+    QRectF absRect(newPos, contentsBoundingRect().size());
     m_widget->setGeometry(absRect.toRect());
 }
 
